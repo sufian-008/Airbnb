@@ -5,7 +5,8 @@ const Listing = require("../Airbnb/models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-
+const wrapAsync = require("./utlis/wrapAsync.js");
+const ExpressError= require("./utlis/ExpressError.js");
 
 
 const MONGO_URL = "mongodb+srv://mdrafin008:jr976YawsNhrNZGk@cluster0.7gknfrz.mongodb.net/wanderlust ";
@@ -51,11 +52,11 @@ app.get("/listings/:id", async(req, res) =>{
 });
 
 //Create Route
-app.post("/listings",async(req, res)=>{
+app.post("/listings", wrapAsync(async(req, res)=>{
       const newListing =  new Listing(req.body.listing)
       await newListing.save();
       res.redirect("/listings");
-});
+}));
 // edit route
 app.get("/listings/:id/edit", async(req, res)=>{
     let {id} = req.params;
@@ -63,6 +64,11 @@ app.get("/listings/:id/edit", async(req, res)=>{
     res.render("listings/edit.ejs", {listing});
 });
 
+app.use((err,req,res,next)=>{
+    let {statusCode, message} =err;
+    res.status(statusCode).send(message);
+   
+});
 
 // update route
  app.put("/listings/:id", async(req, res) =>{
