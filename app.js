@@ -7,6 +7,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utlis/wrapAsync.js");
 const ExpressError= require("./utlis/ExpressError.js");
+const Review = require("../Airbnb/models/review.js")
 
 
 const MONGO_URL = "mongodb+srv://mdrafin008:jr976YawsNhrNZGk@cluster0.7gknfrz.mongodb.net/wanderlust ";
@@ -52,7 +53,9 @@ app.get("/listings/:id", async(req, res) =>{
 });
 
 //Create Route
-app.post("/listings", wrapAsync(async(req, res)=>{
+app.post("/listings", wrapAsync(async(req, res, next)=>{
+      let result = listingSchema.validate(req.body);
+      console.log(result);
       const newListing =  new Listing(req.body.listing)
       await newListing.save();
       res.redirect("/listings");
@@ -64,10 +67,9 @@ app.get("/listings/:id/edit", async(req, res)=>{
     res.render("listings/edit.ejs", {listing});
 });
 
-app.use((err,req,res,next)=>{
-    let {statusCode, message} =err;
-    res.status(statusCode).send(message);
-   
+app.use((err, req, res, next) => {
+    let { statusCode = 500, message = "Something went wrong" } = err;
+    res.status(statusCode).render(message);
 });
 
 // update route
@@ -84,6 +86,26 @@ app.delete("/listings/:id", async(req, res) => {
       let deleteListing = await Listing.findByIdAndDelete(id);
       res.redirect("/listings");
 })
+
+//reviews post route
+app.post("/listings/:id/reviews", async(req, res) =>{
+    const listing = await Listing.findById(req.params.id);
+   console.log(listing)
+  if (!listing) {
+    return res.status(404).send("Listing not found");
+  }
+
+  const newReview = new Review(req.body.review);
+  console.log(newReview);
+  listing.reviews.push(newReview);
+
+  await newReview.save();
+  await listing.save();
+
+   res.redirect(`/listings/${listing._id}`);
+
+})
+
 
 // app.get("/testListing", async(req,res)=>{
 //    let sampleListing = new Listing({
