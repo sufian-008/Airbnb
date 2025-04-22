@@ -44,13 +44,22 @@ const sessionOptions= {
 
 };
 
-app.use(session(sessionOptions));
-
-app.use("/listings", listings);
-
 app.get("/", (req, res) => {
     res.send("Hi, I am root");
 });
+
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use((req, res, next) =>{
+    res.locals.success = req.flash("success");
+    next();
+})
+
+app.use("/listings", listings);
+
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
