@@ -10,8 +10,12 @@ const ExpressError = require("./utlis/ExpressError.js");
 const Review = require("../Airbnb/models/review.js");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const localStrategy = require("passport-local");
+const User = require("./models/user.js");
 
 const listings = require("./routes/listing.js");
+const users = require("./routes/user.js");
 
 const MONGO_URL = "mongodb+srv://mdrafin008:jr976YawsNhrNZGk@cluster0.7gknfrz.mongodb.net/wanderlust";
 
@@ -52,13 +56,18 @@ app.get("/", (req, res) => {
 app.use(session(sessionOptions));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session())
+passport.use(new localStrategy(User.authenticate()));
+
+
 app.use((req, res, next) =>{
     res.locals.success = req.flash("success");
     next();
 })
 
 app.use("/listings", listings);
-
+app.use("/", users);
 
 
 // Error handling middleware
