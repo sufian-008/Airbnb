@@ -31,7 +31,7 @@ router.get("/new", (req, res) => {
 // Show listing route
 router.get("/:id", wrapAsync(async(req, res) => {
     const { id } = req.params;
-    const listing = await Listing.findById(id).populate("reviews");
+    const listing = await Listing.findById(id);
     res.render("listings/show.ejs", { listing });
 }));
 
