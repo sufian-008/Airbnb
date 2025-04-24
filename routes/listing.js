@@ -25,6 +25,10 @@ router.get("/", wrapAsync(async(req, res) => {
 }));
 // New listing form route
 router.get("/new", (req, res) => {
+    if(!req.isAuthenticated()){
+         req.flash("success", "You must be Logged in to create Listing");
+        return  res.redirect("/login");
+    }
     res.render("listings/new.ejs");
 });
 

@@ -26,7 +26,7 @@ router.post("/login", passport.authenticate("local", {
 }), (req, res) => {
     console.log("hurray");
     req.flash("success", "Welcome back!");
-   
+    res.redirect("/listings")
 });
 
 
