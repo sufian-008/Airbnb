@@ -5,6 +5,8 @@ const ExpressError = require("../utlis/ExpressError.js");
 const Listing = require("../models/listing.js");
 const Review = require("../models/review.js"); // Assuming you have a Review model
 const Joi = require("joi");
+const {isLoggedIn} = require("../middleware.js");
+
 
 // Validation Schema (Define it if not already defined)
 const listingSchema = Joi.object({
@@ -24,11 +26,8 @@ router.get("/", wrapAsync(async(req, res) => {
     res.render("listings/index.ejs", { allListing });
 }));
 // New listing form route
-router.get("/new", (req, res) => {
-    if(!req.isAuthenticated()){
-         req.flash("success", "You must be Logged in to create Listing");
-        return  res.redirect("/login");
-    }
+router.get("/new", isLoggedIn, (req, res) => {
+  
     res.render("listings/new.ejs");
 });
 
@@ -56,7 +55,7 @@ router.post("/", wrapAsync(async(req, res, next) => {
 }));
 
 // Edit route
-router.get("/:id/edit", wrapAsync(async(req, res) => {
+router.get("/:id/edit",isLoggedIn, wrapAsync(async(req, res) => {
     const { id } = req.params;
     const listing = await Listing.findById(id);
     res.render("listings/edit.ejs", { listing });
@@ -70,7 +69,7 @@ router.put("/:id", wrapAsync(async(req, res) => {
 }));
 
 // Delete route
-router.delete("/:id", wrapAsync(async(req, res) => {
+router.delete("/:id", isLoggedIn, wrapAsync(async(req, res) => {
     const { id } = req.params;
     await Listing.findByIdAndDelete(id);
     res.redirect("/listings");
