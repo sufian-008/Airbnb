@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <!-- Optional: Link to your main CSS file -->
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 40px;
+        }
+        .error-container {
+            background-color: #f5c6cb;
+            padding: 20px;
+            border: 1px solid #f1b0b7;
+            border-radius: 5px;
+            max-width: 700px;
+            margin: auto;
+        }
+        h1 {
+            margin-top: 0;
+        }
+        pre {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>🚨 Something Went Wrong</h1>
+        <p><strong>Status Code:</strong> <%= error.status || 500 %></p>
+        <p><strong>Message:</strong> <%= error.message || "Unexpected error occurred." %></p>
+
+        <% if (error.stack) { %>
+            <h3>Stack Trace:</h3>
+            <pre><%= error.stack %></pre>
+        <% } %>
+    </div>
+</body>
+</html>

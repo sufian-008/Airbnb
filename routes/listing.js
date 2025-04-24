@@ -19,10 +19,10 @@ const listingSchema = Joi.object({
 
 // Index route
 router.get("/", wrapAsync(async(req, res) => {
+    console.log("Route hit for all listings");
     const allListing = await Listing.find({});
     res.render("listings/index.ejs", { allListing });
 }));
-
 // New listing form route
 router.get("/new", (req, res) => {
     res.render("listings/new.ejs");
