@@ -35,7 +35,7 @@ router.post("/login", saveRedirectUrl, passport.authenticate("local", {
    
     req.flash("success", "Welcome back!");
     let redirectUrl = res.locals.redirectUrl || "/listings";
-    res.redirect(redirectUrl);
+    res.redirect(   redirectUrl);
 });
 
 router.get("/logout", (req, res, next)=>{

@@ -1,17 +1,15 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// Define the Review schema
 const reviewSchema = new Schema({
-    comment: String,
-    rating: {
-        type: Number,
-        min: 1,
-        max: 5
-    },
-    creatAt: {
-        type: Date,
-        default: Date.now()
-    }
+    text: { type: String, required: true },
+    rating: { type: Number, required: true },
+    createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Review", reviewSchema);
+// Check if the 'Review' model is already defined
+const Review = mongoose.models.Review || mongoose.model("Review", reviewSchema);
+
+module.exports = Review;
+

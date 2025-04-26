@@ -16,14 +16,7 @@ const User = require("./models/user.js");
 
 const listings = require("./routes/listing.js");
 const users = require("./routes/user.js");
-
-const MONGO_URL = "mongodb+srv://mdrafin008:jr976YawsNhrNZGk@cluster0.7gknfrz.mongodb.net/wanderlust";
-
-main().then(() => {
-    console.log("connected to DB");
-}).catch(err => {
-    console.log(err);
-});
+const MONGO_URL =require("./db.js");
 
 async function main() {
     await mongoose.connect(MONGO_URL);

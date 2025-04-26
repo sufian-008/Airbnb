@@ -5,17 +5,19 @@ const ExpressError = require("../utlis/ExpressError.js");
 const Listing = require("../models/listing.js");
 const Review = require("../models/review.js"); // Assuming you have a Review model
 const Joi = require("joi");
-const {isLoggedIn} = require("../middleware.js");
-
+const { isLoggedIn } = require("../middleware.js");
 
 // Validation Schema (Define it if not already defined)
 const listingSchema = Joi.object({
     listing: Joi.object({
-        title: Joi.string().required(),
-        description: Joi.string().required(),
-        price: Joi.number().required().min(0),
-        location: Joi.string().required(),
-        country: Joi.string().required()
+      title: Joi.string().required(),
+      description: Joi.string().required(),
+      price: Joi.number().required().min(0),
+      location: Joi.string().required(),
+      country: Joi.string().required(),
+      image: Joi.object({
+        url: Joi.string().uri().required()
+      }).optional()
     }).required()
 });
 
@@ -25,16 +27,23 @@ router.get("/", wrapAsync(async(req, res) => {
     const allListing = await Listing.find({});
     res.render("listings/index.ejs", { allListing });
 }));
+
 // New listing form route
 router.get("/new", isLoggedIn, (req, res) => {
-  
     res.render("listings/new.ejs");
 });
 
-// Show listing route
+// Show listing route with reviews populated
 router.get("/:id", wrapAsync(async(req, res) => {
     const { id } = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id)
+        .populate("owner")
+        .populate("reviews");  // Populate reviews as well
+    
+    if (!listing) {
+        throw new ExpressError("Listing not found", 404);
+    }
+
     res.render("listings/show.ejs", { listing });
 }));
 
@@ -50,14 +59,19 @@ router.post("/", wrapAsync(async(req, res, next) => {
 
     const newListing = new Listing(req.body.listing);
     await newListing.save();
-    req.flash("success","New Listing Created!");
+    req.flash("success", "New Listing Created!");
     res.redirect("/listings");
 }));
 
 // Edit route
-router.get("/:id/edit",isLoggedIn, wrapAsync(async(req, res) => {
+router.get("/:id/edit", isLoggedIn, wrapAsync(async(req, res) => {
     const { id } = req.params;
     const listing = await Listing.findById(id);
+    
+    if (!listing) {
+        throw new ExpressError("Listing not found", 404);
+    }
+
     res.render("listings/edit.ejs", { listing });
 }));
 
@@ -72,6 +86,7 @@ router.put("/:id", wrapAsync(async(req, res) => {
 router.delete("/:id", isLoggedIn, wrapAsync(async(req, res) => {
     const { id } = req.params;
     await Listing.findByIdAndDelete(id);
+    req.flash("success", "Listing deleted successfully!");
     res.redirect("/listings");
 }));
 
@@ -80,6 +95,11 @@ router.post("/:id/reviews", wrapAsync(async(req, res) => {
     const listing = await Listing.findById(req.params.id);
     if (!listing) {
         return res.status(404).send("Listing not found");
+    }
+
+    // Validation for review input
+    if (!req.body.review || !req.body.review.text) {
+        return res.status(400).send("Review text is required");
     }
 
     const newReview = new Review(req.body.review);
