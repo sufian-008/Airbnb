@@ -38,7 +38,7 @@ router.get("/:id", wrapAsync(async(req, res) => {
     const { id } = req.params;
     const listing = await Listing.findById(id)
         .populate("owner")
-        .populate("reviews");  // Populate reviews as well
+        .populate("reviews");  
     
     if (!listing) {
         throw new ExpressError("Listing not found", 404);
