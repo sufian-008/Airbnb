@@ -1,4 +1,4 @@
-# 🏠 Hostly
+# 🏠 Airbnb
 
 **Hostly** is a basic clone of [Airbnb](https://www.airbnb.com/) built as a personal project to practice full-stack web development skills. The application allows users to browse listings, view detailed property information, and simulate a simple booking process.
 
