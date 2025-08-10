@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
 
-const MONGO_URL = "mongodb+srv://mdrafin008:jr976YawsNhrNZGk@cluster0.7gknfrz.mongodb.net/wanderlust ";
+const MONGO_URL = "mongodb+srv://mdrafin008:UPImAro2B00QauSK@cluster0.194peyb.mongodb.net/Airbnb";
 
 
 main().then(() =>{

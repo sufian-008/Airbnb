@@ -35,7 +35,7 @@ const listingSchema = new Schema({
     price: Number,
     location: String,
     country: String,
-    reviews: [  // Define reviews as an array of ObjectIds, referencing the Review model
+    reviews: [  
         {
             type: Schema.Types.ObjectId,
             ref: "Review"

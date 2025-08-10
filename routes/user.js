@@ -17,9 +17,8 @@ router.post("/signup", async(req, res)=>{
      req.login(registerUser, (err)=>{
         if(err){
             return next(err);
-
         }
-        req.flash("success", "Welcome to wanderlust");
+        req.flash("success", "Welcome to Airbnb");
         res.redirect("/listings");
      })
     
