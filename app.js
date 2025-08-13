@@ -11,8 +11,8 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const User = require("./models/user.js");
-const listings = require("../Airbnb/routes/listing.js");
-const users = require("../Airbnb/routes/user.js");
+const listings = require("./routes/listing.js");
+const users = require("./routes/user.js");
 const MONGO_URL =require("./db.js");
 
 async function main() {
