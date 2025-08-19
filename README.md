@@ -1,4 +1,4 @@
-# 🏠 Airbnb Clone (Basic Website)
+# 🏠 Airbnb(Basic Website)
 
 This is a basic clone of [Airbnb](https://www.airbnb.com/) built as a personal project to practice full-stack web development skills. It allows users to browse listings, view property details, and simulate a booking process.
 
