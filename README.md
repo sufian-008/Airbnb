@@ -17,15 +17,6 @@ This is a basic clone of [Airbnb](https://www.airbnb.com/) built as a personal p
 - **Database**: (Optional) MongoDB / Firebase / JSON (or any other)
 - **Other**: Git, GitHub for version control
 
-## 📸 Screenshots
-
-*(Add a few screenshots of your site here if you have them)*
-
-## 📁 Project Structure
-
-# Navigate to project folder
-cd airbnb-clone
-
 # Install dependencies
 npm install
 
